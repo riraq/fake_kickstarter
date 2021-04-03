@@ -1,5 +1,8 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+
+const { User, Project } = require('../../models');
+// It's done when the `/project/:id` route renders an individual project's details based on the route parameter id.
+
 
 // CREATE new user
 router.post('/', async (req, res) => {
@@ -67,6 +70,26 @@ router.post('/logout', (req, res) => {
     });
   } else {
     res.status(404).end();
+  }
+});
+
+
+router.get('/project/:id', async (req, res) => {
+  // If the user is not logged in, redirect the user to the login page
+  if (!req.session.loggedIn) {
+    res.redirect('/login');
+  } else {
+    // If the user is logged in, allow them to view the painting
+    try {
+      const crowdfunding_db = await Project.findByPk(req.params.id);
+
+      const project = crowdfunding_db.get({ plain: true });
+
+      res.render('project', { project, loggedIn: req.session.loggedIn });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
   }
 });
 
