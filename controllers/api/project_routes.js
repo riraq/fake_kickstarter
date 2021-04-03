@@ -1,6 +1,8 @@
 const router = require('express').Router();
+
 const { User, Project } = require('../../models');
 // It's done when the `/project/:id` route renders an individual project's details based on the route parameter id.
+
 
 // CREATE new user
 router.post('/', async (req, res) => {
@@ -70,6 +72,7 @@ router.post('/logout', (req, res) => {
     res.status(404).end();
   }
 });
+
 
 router.get('/project/:id', async (req, res) => {
   // If the user is not logged in, redirect the user to the login page
